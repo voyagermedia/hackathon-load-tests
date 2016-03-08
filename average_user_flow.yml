@@ -189,3 +189,552 @@ scenarios:
             json:
               parentId: "{{ summaryId }}"
               poIds: ["{{ summaryId }}"]
+    - name: test
+      flow:
+        - post:
+            url: /signup
+            headers:
+              content-type: application/x-www-form-urlencoded
+            body: 'email=loadtest_{{ $randomstring(32) }}%40localhost&password=random123&password_repeat=random123&clientlanguage=en_us&clientorigin=https%3a%2f%2frplan.com'
+        - think: 1
+        - get:
+            url: /api/featureswitch
+            headers: {}
+        - get:
+            url: /api/user/current/root
+            headers: {}
+            capture:
+              json: "$.rootplanningobjectid"
+              as: "rootplanningobjectid"
+        - get:
+            url: /statestorage/schedulemanager.workingset
+            headers: {}
+        - get:
+            url: /api/user/current/root
+            headers: {}
+            capture:
+              json: "$.rootplanningobjectid"
+              as: "rootplanningobjectid"
+        - get:
+            url: /api/planning-objects/{{ rootplanningobjectid }}/relations?calculatevalues=false
+            headers: {}
+        - get:
+            url: /api/user/current/root
+            headers: {}
+            capture:
+              json: "$.rootplanningobjectid"
+              as: "rootplanningobjectid"
+        - think: 2
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: true
+              name: project
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-08'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ rootplanningobjectid }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: true
+            capture:
+              json: "$.id"
+              as: "projectid"
+        - put:
+            url: /statestorage/schedulemanager.workingset
+            headers:
+              content-type: application/json
+            json:
+              schedulemanager.workingset:
+                - "{{ projectid }}"
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: '1'
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-08'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ projectid }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: false
+            capture:
+              json: "$.id"
+              as: "milestone1"
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: '2'
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-08'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ projectid }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: true
+            capture:
+              json: "$.id"
+              as: "milestone2"
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: '3'
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-08'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ projectid }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: true
+            capture:
+              json: "$.id"
+              as: "milestone3"
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: '4'
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-08'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ projectid }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: true
+            capture:
+              json: "$.id"
+              as: "milestone4"
+        - think: 2
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: '5'
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-08'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ projectid }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: true
+            capture:
+              json: "$.id"
+              as: "milestone5"
+        - patch:
+            url: /api/planning-objects/{{ milestone1 }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedduration: 0
+        - patch:
+            url: /api/planning-objects/{{ milestone2 }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedduration: 0
+        - patch:
+            url: /api/planning-objects/{{ milestone3 }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedduration: 0
+        - patch:
+            url: /api/planning-objects/{{ milestone4 }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedduration: 0
+        - patch:
+            url: /api/planning-objects/{{ milestone5 }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedduration: 0
+        - patch:
+            url: /api/planning-objects/{{ milestone2 }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedstart: '2016-03-16'
+        - patch:
+            url: /api/planning-objects/{{ milestone3 }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedstart: '2016-03-21'
+        - patch:
+            url: /api/planning-objects/{{ milestone4 }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedstart: '2016-03-23'
+        - patch:
+            url: /api/planning-objects/{{ milestone5 }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedstart: '2016-03-29'
+        - patch:
+            url: /api/planning-objects/{{ projectid }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedduration: 23
+        - think: 2
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: a
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-29'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ projectid }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: true
+            capture:
+              json: "$.id"
+              as: "poa"
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: b
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-29'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ projectid }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: true
+            capture:
+              json: "$.id"
+              as: "pob"
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: c
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-29'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ projectid }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: true
+            capture:
+              json: "$.id"
+              as: "poc"
+        - think: 2
+        - patch:
+            url: /api/planning-objects/{{ poa }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedduration: 5
+        - patch:
+            url: /api/planning-objects/{{ pob }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedduration: 10
+        - patch:
+            url: /api/planning-objects/{{ poc }}
+            headers:
+              content-type: application/json
+            json:
+              userdefinedduration: 3
+        - think: 2
+        - post:
+            url: /api/planning-objects/links
+            headers:
+              content-type: application/json
+            json:
+              - source: "{{ poa }}"
+                target: "{{ pob }}"
+                type: end-start
+                autolink: true
+                autolinkcycle: false
+                autolinkignoredincycle: false
+              - source: "{{ pob }}"
+                target: "{{ poc }}"
+                type: end-start
+                autolink: true
+                autolinkcycle: false
+                autolinkignoredincycle: false
+        - post:
+            url: /api/planning-objects/{{ poa }}/link
+            headers:
+              content-type: application/json
+            json:
+              source: "{{ milestone2 }}"
+              target: "{{ poa }}"
+              type: end-start
+              autolink: null
+              autolinkcycle: false
+              autolinkignoredincycle: false
+        - patch:
+            url: /api/planning-objects/{{ poa }}/link/{{ milestone2 }}/end-start
+            headers:
+              content-type: application/json
+            json:
+              autolink: true
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: '1'
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-29'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ poc }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: false
+            capture:
+              json: "$.id"
+              as: "child1"
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: '2'
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-29'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ poc }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: true
+            capture:
+              json: "$.id"
+              as: "child2"
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: '3'
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-29'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ poc }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: true
+        - post:
+            url: /api/planning-objects
+            headers:
+              content-type: application/json
+            json:
+              cas: null
+              id: null
+              isproject: false
+              name: '4'
+              note: ''
+              position: 0
+              progress: 0
+              relations: []
+              wdm: d
+              userdefinedstart: '2016-03-29'
+              userdefinedduration: 1
+              calculatedstart: null
+              calculatedduration: null
+              parent: "{{ poc }}"
+              childrenids: []
+              link: []
+              acl: []
+              roles: []
+              insertaslastchild: true
+        - post:
+            url: /api/planning-objects/duplicate
+            headers:
+              content-type: application/json
+            json:
+              poids:
+                - "{{ child1 }}"
+              parentid: "{{ child2 }}"
+            capture:
+              json: "$.originalduplicateidmap.{{ child1 }}"
+              as: "copy_child1"
+        - post:
+            url: /api/planning-objects/duplicate
+            headers:
+              content-type: application/json
+            json:
+              poids:
+                - "{{ child2 }}"
+              parentid: "{{ copy_child1 }}"
+            capture:
+              json: "$.originalduplicateidmap.{{ copy_child1 }}"
+              as: "copy_copy_child1"
+        - get:
+            url: /schedulemanager/object/{{ copy_copy_child1 }}
+            headers: {}
+        - think: 2
+        - get:
+            url: /api/featureswitch
+            headers: {}
+        - get:
+            url: /api/user/current/root
+            headers: {}
+        - get:
+            url: /api/planning-objects/{{ projectid }}
+            headers: {}
+        - put:
+            url: /statestorage/schedulemanager.workingset
+            headers:
+              content-type: application/json
+            json:
+              schedulemanager.workingset:
+                - "{{ projectid }}"
+        - get:
+            url: /api/planning-objects/{{ copy_copy_child1 }}/path-in-working-set?rootelementids={{ projectid }}
+            headers: {}
