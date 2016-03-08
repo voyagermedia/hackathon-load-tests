@@ -1,0 +1,191 @@
+config:
+    phases:
+        - duration: 1
+          arrivalCount: 1
+scenarios:
+    - name: "average user"
+      flow:
+        - post:
+            url: "/signup"
+            body: "email=loadtest_{{ $randomString(32) }}%40localhost&password=test.....&password_repeat=test.....&clientLanguage=de_DE&clientOrigin=http%3A%2F%2Flocalhost%3A"
+            headers:
+                Content-Type: "application/x-www-form-urlencoded"
+        - get:
+            url: "/api/user/current/root"
+            capture:
+                json: "$.rootPlanningObjectId"
+                as: "rootPlanningObjectId"
+        # create project
+        - post:
+            url: "/api/planning-objects"
+            json: 
+                cas: null
+                id: null
+                isProject: true
+                name: "Project1"
+                note: ""
+                position: 0
+                progress: 0
+                wdm: "d"
+                userDefinedStart: "2016-03-08"
+                userDefinedDuration: 1
+                calculatedStart: null
+                calculatedDuration: null
+                parent: "{{ rootPlanningObjectId }}"
+                childrenIds: []
+                link: []
+                acl: []
+                roles: []
+                relations: []
+                insertAsLastChild: true
+            capture:
+              json: "$.id"
+              as: "projectId"
+
+        - think: 1
+
+        # create summary
+        - post:
+            url: "/api/planning-objects"
+            json:
+                acl: []
+                calculatedDuration: null
+                calculatedStart: null
+                cas: null
+                childrenIds: []
+                id: null
+                insertAsLastChild: false
+                isProject: false
+                link: []
+                name: "{{ $randomString(32) }}"
+                note: "{{ $randomString(128) }}"
+                parent: "{{ projectId }}"
+                position: 0
+                progress: 0
+                relations: []
+                roles: []
+                userDefinedDuration: 1
+                userDefinedStart: "2016-03-08"
+                wdm: "d"
+            capture:
+                json: "$.id"
+                as: "summaryId"
+
+        - think: 1
+
+        # create child 1
+        - post:
+            url: "/api/planning-objects"
+            json:
+                acl: []
+                calculatedDuration: null
+                calculatedStart: null
+                cas: null
+                childrenIds: []
+                id: null
+                insertAsLastChild: false
+                isProject: false
+                link: []
+                name: "{{ $randomString(32) }}"
+                note: "{{ $randomString(128) }}"
+                parent: "{{ summaryId }}"
+                position: 0
+                progress: 0
+                relations: []
+                roles: []
+                userDefinedDuration: 1
+                userDefinedStart: "2016-03-08"
+                wdm: "d"
+            capture:
+                json: "$.id"
+                as: "child1Id"
+        # create child 2
+        - post:
+            url: "/api/planning-objects"
+            json:
+                acl: []
+                calculatedDuration: null
+                calculatedStart: null
+                cas: null
+                childrenIds: []
+                id: null
+                insertAsLastChild: false
+                isProject: false
+                link: []
+                name: "{{ $randomString(32) }}"
+                note: "{{ $randomString(128) }}"
+                parent: "{{ summaryId }}"
+                position: 0
+                progress: 0
+                relations: []
+                roles: []
+                userDefinedDuration: 1
+                userDefinedStart: "2016-03-08"
+                wdm: "d"
+            capture:
+                json: "$.id"
+                as: "child2Id"
+
+        - think: 2
+
+        # load children
+        - get:
+            url: "/api/planning-objects/{{ id }}/relations"
+
+        - think: 1
+
+        # link children
+        - post:
+            url: "/api/planning-objects/{{ child2Id }}/link"
+            json:
+                autolink: null
+                autolinkCycle: false
+                autolinkIgnoredInCycle: false
+                source: "{{ child1Id }}"
+                target: "{{ child2Id }}"
+                type: "end-start"
+        - patch:
+            url: "/api/planning-objects/{{ child2Id }}/link/{{ child1Id }}/end-start"
+            json:
+                autolink: true
+
+        - think: 1
+
+        # modify duration of children 1
+        - patch:
+            url: "/api/planning-objects/{{ child1Id }}"
+            json:
+                userDefinedDuration: 10
+
+        - think: 1
+
+        # modify name of children 2
+        - patch:
+            url: "/api/planning-objects/{{ child2Id }}"
+            json:
+                name: "{{ $randomString(32) }}"
+
+        - think: 2
+
+        # multiplicate planning objects (result 768 pos)
+        - post:
+            url: "/api/planning-objects/duplicate"
+            json:
+              parentId: "{{ summaryId }}"
+              poIds: ["{{ summaryId }}"]
+
+        - think: 1
+
+        - post:
+            url: "/api/planning-objects/duplicate"
+            json:
+              parentId: "{{ summaryId }}"
+              poIds: ["{{ summaryId }}"]
+
+        - think: 1
+
+        - post:
+            url: "/api/planning-objects/duplicate"
+            json:
+              parentId: "{{ summaryId }}"
+              poIds: ["{{ summaryId }}"]
