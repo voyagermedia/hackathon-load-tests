@@ -1,14 +1,9 @@
 #!/bin/bash
 
 readonly ARGS="$@"
-readonly ARTILLERY_CONFIG="/tmp/current_artillery_config.yml"
+readonly ARTILLERY_CONFIG="/tmp/vmLoadTestScript.json"
 readonly TMP_DIR="/tmp"
 readonly OUTPUT_DIRECTORY="/artillery"
-
-storeConfig() {
-    echo "Storing artillery configuration..."
-    cat - > "$ARTILLERY_CONFIG"
-}
 
 runArtillery() {
     echo "Starting artillery..."
@@ -24,7 +19,6 @@ generateReport() {
 }
 
 main() {
-    storeConfig
     runArtillery $@
     generateReport
 }

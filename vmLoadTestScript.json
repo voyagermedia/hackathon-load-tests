@@ -1,0 +1,215 @@
+{
+    "config": {
+        "target": "http://your-wppr-1o36b189qfryw.sfubmpcar2.us-east-1.elasticbeanstalk.com",
+        "phases": [{
+            "duration": 300,
+            "arrivalRate": 5,
+            "name": "Warm-up"
+        }, {
+            "pause": 10
+        }, {
+            "duration": 60,
+            "arrivalCount": 30
+        }, {
+            "duration": 600,
+            "arrivalRate": 50,
+            "name": "High load phase"
+        }],
+        "variables": {
+            "pageNumber": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]
+        }
+    },
+    "environments": {
+        "production": {
+            "target": "http://your-wppr-1o36b189qfryw.sfubmpcar2.us-east-1.elasticbeanstalk.com"
+        },
+        "staging": {
+            "target": "http://your-wpst-wl4llebq6h62.sfubmpcar2.us-east-1.elasticbeanstalk.com"
+        }
+    },
+    "scenarios": [{
+        "name": "hillary",
+        "weight": 5,
+        "flow": [{
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 19
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 14
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 9
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 21
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 15
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 10
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 18
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 11
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 12
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 10
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 16
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 15
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 12
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }, {
+            "think": 20
+        }, {
+            "get": {
+                "url": "/rare_hillary_clinton_pictures/{{pageNumber}}/"
+            }
+        }]
+    }, {
+        "name": "jeannie",
+        "weight": 5,
+        "flow": [{
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 19
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 14
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 9
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 21
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 15
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 10
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 18
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 11
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 12
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 10
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 16
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 15
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 12
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }, {
+            "think": 20
+        }, {
+            "get": {
+                "url": "/i_dream_of_jeannie_facts/{{pageNumber}}/"
+            }
+        }]
+    }]
+}
